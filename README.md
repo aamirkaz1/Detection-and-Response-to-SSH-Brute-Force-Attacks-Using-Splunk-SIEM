@@ -1,14 +1,26 @@
 ## Objective
 The goal of this project was to design and implement a local cybersecurity home lab to simulate a real-world cyber attack and develop detection capabilities. Specifically, I set up a network environment to execute an SSH brute-force attack against a Linux target and utilized Splunk Enterprise to ingest the logs, write detection queries, and build an alerting dashboard.
 
+## Theory 
+SSH : Secure Shell is a Cryptographic protocol which allows users to login and control remote servers via command line
+
+Brute Force Attack : Every possible combination of letters, symbols and numbers (usually automated to speed up the process) is known as a brute force attack
+Eg: John the ripper, Aircrack ng
+
+Splunk : Splunk is a platform that ingest, indexes and analyzes machine generated data from a source in the real time. Splunk is a provider of SIEM technology Siem is security information and event management.
+
 ## Network Architecture
 <img width="1200" height="794" alt="image" src="https://github.com/user-attachments/assets/2ebf16a4-02f4-40ab-9583-65e361d3cc64" />
 
 
 ## The lab environment consists of three primary virtual machines hosted on Oracle VirtualBox, connected via an isolated NAT network:
 * **Attacker Machine:** Kali Linux (Used to run the Hydra brute-force tool)
-* **Target Machine (DMZ):** Ubuntu Server (Configured with SSH exposed to the internal network)
-* **SIEM Server:** Ubuntu Server running Splunk Enterprise (Configured to receive and index logs from the target)
+* **Target Machine (DMZ):** Ubuntu Server (Configured with SSH exposed to the internal network).Demilitarised zone it is a sub network which acts as a buffe, which exposes external services like web, email, etc. Keeping internal network isolated and safe. Windows and Ubuntu servers with Splunk universal forwarder installed helps in sending alerts to Splunk servers.
+* **SIEM Server:** Ubuntu Server running Splunk Enterprise (Configured to receive and index logs from the target).Splunk is installed on Ubuntu and fetches the Suricata logs. Suricata is a subset under SIEM. SIEM is a vast and takes data from various sources which would include firewalls, applications, Suricata ,etc.
+* **Firewall:** pfsense (packet filtering). We can also use Palo Alto but pfsense is compatible with Suricata. Integration is easy with its rules. Firewall sends locks to splunk server.
+* **Applications:** This block represents the modern, cloud-native services that a company would host and that an attacker would try to hack. However for my current project (detecting SSH brute force), I do not need Docker, Kubernetes, or NGINX at all. 
+
+
 
 ## Tools & Technologies Used
 * **Hypervisor:** Oracle VirtualBox
